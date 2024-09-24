@@ -71,11 +71,13 @@ struct msi_ec_cpu_conf {
 	int bs_fan_speed_address; // basic
 	int bs_fan_speed_base_min;
 	int bs_fan_speed_base_max;
+	int rt_fan_speed_fallback;
 };
 
 struct msi_ec_gpu_conf {
 	int rt_temp_address;
 	int rt_fan_speed_address; // realtime
+	int rt_fan_speed_fallback;
 };
 
 struct msi_ec_led_conf {

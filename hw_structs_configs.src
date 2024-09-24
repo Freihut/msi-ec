@@ -1814,16 +1814,18 @@ static struct msi_ec_conf CONF22 __initdata = {
 	},
 	.cpu = {
 		.rt_temp_address       = 0x68,
-		.rt_fan_speed_address  = 0x71,
-		.rt_fan_speed_base_min = 0x19,
+		.rt_fan_speed_address  = 0xcd,//was = 0x71, //probably some target-fan-speed
+		.rt_fan_speed_base_min = 0x19,//also seems wrong as it reads 0, but you can clearly hear the fan running
 		.rt_fan_speed_base_max = 0x37,
 		.bs_fan_speed_address  = MSI_EC_ADDR_UNKNOWN,
 		.bs_fan_speed_base_min = 0x00,
 		.bs_fan_speed_base_max = 0x0f,
+		.rt_fan_speed_fallback = 1874,//fallback speed, used if read_ec reads nothing or garbage or on idle (where it reports 0, but you can clearly hear the fan)
 	},
 	.gpu = {
-		.rt_temp_address      = 0x80,
-		.rt_fan_speed_address = 0x89,
+		.rt_temp_address       = 0x80,
+		.rt_fan_speed_address  = 0xcb,//was = 0x89, //probably also some target-fan-speed
+		.rt_fan_speed_fallback = 0,//fallback speed, used if read_ec reads nothing or garbage
 	},
 	.leds = {
 		.micmute_led_address = 0x2b,

@@ -792,6 +792,14 @@ static DEVICE_ATTR_RW(fan_mode);
 static DEVICE_ATTR_RO(fw_version);
 static DEVICE_ATTR_RO(fw_release_date);
 
+static int CalcFanSpeed(u8 Data, int Fallback)
+{
+if (Data > 10)
+	return (478000/Data);
+else
+	return Fallback;
+}
+
 // ============================================================ //
 // Sysfs platform device attributes (cpu)
 // ============================================================ //
@@ -818,17 +826,15 @@ static ssize_t cpu_realtime_fan_speed_show(struct device *device,
 	int result;
 
 	result = ec_read(conf.cpu.rt_fan_speed_address, &rdata);
+
 	if (result < 0)
+		{
+		sysfs_emit(buf, "%i\n", conf.cpu.rt_fan_speed_fallback); //on readfails the fallback is presented to /sys/.. (fixes some gibberish data after cold  boot)
 		return result;
+		}
 
-	if ((rdata < conf.cpu.rt_fan_speed_base_min ||
-	    rdata > conf.cpu.rt_fan_speed_base_max))
-		return -EINVAL;
+	return sysfs_emit(buf, "%i\n", CalcFanSpeed(rdata, conf.cpu.rt_fan_speed_fallback));
 
-	return sysfs_emit(buf, "%i\n",
-		          100 * (rdata - conf.cpu.rt_fan_speed_base_min) /
-				  (conf.cpu.rt_fan_speed_base_max -
-				   conf.cpu.rt_fan_speed_base_min));
 }
 
 static ssize_t cpu_basic_fan_speed_show(struct device *device,
@@ -931,7 +937,7 @@ static ssize_t gpu_realtime_fan_speed_show(struct device *device,
 	if (result < 0)
 		return result;
 
-	return sysfs_emit(buf, "%i\n", rdata);
+	return sysfs_emit(buf, "%i\n", CalcFanSpeed(rdata, conf.gpu.rt_fan_speed_fallback));
 }
 
 static struct device_attribute dev_attr_gpu_realtime_temperature = {
