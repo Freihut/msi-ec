@@ -1828,8 +1828,8 @@ static struct msi_ec_conf CONF22 __initdata = {
 		.rt_fan_speed_fallback = 0,//fallback speed, used if read_ec reads nothing or garbage
 	},
 	.leds = {
-		.micmute_led_address = 0x2b,
-		.mute_led_address    = 0x2c,
+		.micmute_led_address = MSI_EC_ADDR_UNKNOWN, //was = 0x2b,
+		.mute_led_address    = MSI_EC_ADDR_UNKNOWN, //was = 0x2c,
 		.bit                 = 2,
 	},
 	.kbd_bl = {
