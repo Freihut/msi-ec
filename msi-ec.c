@@ -1258,7 +1258,6 @@ static void msi_platform_remove(struct platform_device *pdev)
 		kfree(msi_gpu_group.attrs);
 	}
 
-	return 0;
 }
 
 static struct platform_device *msi_platform_device;
