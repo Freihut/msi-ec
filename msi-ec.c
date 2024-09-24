@@ -1246,7 +1246,7 @@ static int msi_platform_probe(struct platform_device *pdev)
 	return sysfs_create_groups(&pdev->dev.kobj, msi_platform_groups);
 }
 
-static int msi_platform_remove(struct platform_device *pdev)
+static void msi_platform_remove(struct platform_device *pdev)
 {
 	if (debug)
 		sysfs_remove_group(&pdev->dev.kobj, &msi_debug_group);
