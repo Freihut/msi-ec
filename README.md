@@ -22,3 +22,11 @@ Changes were made for the Alpha 17 b5eek to read out the actual fan-speeds. Due 
   - Description: This entry reports the current gpu fan speed in rpm
   - Access: Read
   - Valid values: 0 - ~6100
+
+## To install into Kernel 6.11 and <6.11 environments
+1. boot older Kernel
+2. `cd [...]/msi-ec/`
+3. `# make dkms-install`
+4. boot Kernel 6.11
+5. `# dkms autoinstall`
+6. reboot or modprobe
