@@ -795,10 +795,19 @@ static DEVICE_ATTR_RO(fw_release_date);
 
 static int CalcFanSpeed(u8 Data, int Fallback)
 {
-if (Data > 10)
-	return (478000/Data);
+/* Highter values = lower fanspeeds (e.g. 255 = 1874; 123 = 3886)
+For some reason my device reports values < ~20 on very cold days in idle state (= 24000 rpm, which is totally unplausible)
+By adding that "low values" to 255 you'll get more plausible values. But's totally guessing.
+*/
+if (Data == 0)
+    return Fallback;
 else
-	return Fallback;
+    {
+    if (Data > 70) //= 6829 rpm
+	    return (478000/Data);
+    else
+        return (478000/(255+Data));
+    }
 }
 
 // ============================================================ //
